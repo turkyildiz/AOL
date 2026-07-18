@@ -14,7 +14,7 @@ export function Footer() {
           </Link>
           <p className="max-w-sm text-sm leading-relaxed text-steel-400">
             U.S. trucking brokerage with assets. Instant FTL &amp; partial quotes on the Air &amp;
-            Ocean network.
+            Ocean network. ISO 9001 · GDP certified · Customs bonded.
           </p>
         </div>
 

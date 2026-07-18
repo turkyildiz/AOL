@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Air & Ocean Logistics — a U.S. trucking brokerage with assets. FTL, LTL, and expedited. No air or ocean carriage.",
+    "About Air & Ocean Logistics — U.S. trucking brokerage with assets. ISO 9001, GDP certified, and customs bonded.",
 };
 
 export default function AboutPage() {
@@ -40,10 +40,27 @@ export default function AboutPage() {
                 Manufacturers, retailers, and industrial shippers trust us when appointments matter,
                 markets tighten, and someone has to own the outcome.
               </p>
+              <p>
+                We are{" "}
+                <strong className="font-semibold text-navy-900">ISO 9001</strong>,{" "}
+                <strong className="font-semibold text-navy-900">GDP certified</strong>, and{" "}
+                <strong className="font-semibold text-navy-900">customs bonded</strong> — so quality
+                systems, healthcare distribution discipline, and bonded freight are part of how we
+                operate every day.
+              </p>
             </div>
           </div>
 
           <div className="space-y-4">
+            {site.certifications.map((item) => (
+              <div key={item.code} className="card-glow">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-orange">
+                  {item.code}
+                </p>
+                <h3 className="mt-1 text-lg font-semibold text-navy-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-steel-500">{item.body}</p>
+              </div>
+            ))}
             {site.differentiators.map((item) => (
               <div key={item.title} className="card-glow">
                 <h3 className="text-lg font-semibold text-navy-900">{item.title}</h3>

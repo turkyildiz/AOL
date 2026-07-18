@@ -50,6 +50,16 @@ export default function HomePage() {
             <p className="mx-auto mt-3 max-w-xl text-sm text-steel-200 sm:text-base">
               Full truckload &amp; partial · Live network rates · No hidden fees
             </p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+              {site.certifications.map((c) => (
+                <span
+                  key={c.code}
+                  className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur"
+                >
+                  {c.title}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Quote form on the video — same first-screen pattern as QuickLoad */}
@@ -81,6 +91,67 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Certifications */}
+      <section className="border-b border-steel-200 bg-steel-50 section-pad py-12 sm:py-14">
+        <div className="container-wide">
+          <div className="mb-8 max-w-2xl">
+            <p className="eyebrow">Compliance &amp; trust</p>
+            <h2 className="display mt-2 text-2xl text-navy-900 sm:text-3xl">
+              Certified for quality, healthcare logistics, and bonded freight
+            </h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {site.certifications.map((c) => (
+              <article key={c.code} className="card-glow">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-brand-orange">
+                  {c.code}
+                </p>
+                <h3 className="mt-2 text-lg font-semibold text-navy-900">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-steel-500">{c.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Equipment story strip */}
+      <section className="section-pad border-b border-steel-200 py-12">
+        <div className="container-wide">
+          <h2 className="display mb-6 text-center text-2xl text-navy-900 sm:text-3xl">
+            Every truck type. Every kind of road.
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                img: "/images/hero-dryvan.jpg",
+                t: "Dry van",
+                d: "General cargo on major corridors and city lanes — AOL-branded capacity.",
+              },
+              {
+                img: "/images/hero-flatbed.jpg",
+                t: "Flatbed & machinery",
+                d: "Heavy equipment and open-deck freight on highways and roads less traveled.",
+              },
+              {
+                img: "/images/hero-reefer.jpg",
+                t: "Reefer / pharma",
+                d: "Temperature-controlled moves for healthcare and cold-chain freight, including vaccine-grade lanes.",
+              },
+            ].map((card) => (
+              <article key={card.t} className="overflow-hidden rounded-xl border border-steel-200 bg-white shadow-sm">
+                <div className="relative aspect-[16/10] w-full">
+                  <Image src={card.img} alt={card.t} fill className="object-cover" sizes="(max-width:768px) 100vw, 33vw" />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-navy-900">{card.t}</h3>
+                  <p className="mt-1 text-sm text-steel-500">{card.d}</p>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

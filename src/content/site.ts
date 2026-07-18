@@ -4,10 +4,27 @@ export const site = {
   legalName: "Air Ocean Logistics, Inc.",
   tagline: "U.S. trucking brokerage with assets",
   description:
-    "Air & Ocean Logistics is a United States trucking brokerage with assets — FTL, LTL, and expedited capacity nationwide. No air. No ocean. Just freight that moves on the road.",
+    "Air & Ocean Logistics is a United States trucking brokerage with assets — FTL, LTL, and expedited capacity nationwide. ISO 9001, GDP certified, and customs bonded. No air. No ocean. Just freight that moves on the road.",
   url: "https://airoceanlogistics.us",
   since: 2012,
   coverageNote: "United States only · Trucking only",
+  certifications: [
+    {
+      code: "ISO 9001",
+      title: "ISO 9001",
+      body: "Quality management systems certified for consistent, documented freight operations.",
+    },
+    {
+      code: "GDP",
+      title: "GDP certified",
+      body: "Good Distribution Practice for temperature-sensitive and healthcare-related cargo.",
+    },
+    {
+      code: "Bonded",
+      title: "Customs bonded",
+      body: "Bonded capacity for secure handling of in-bond freight and customs-controlled moves.",
+    },
+  ],
   contact: {
     phone: "(312) 342-7133",
     phoneHref: "tel:+13123427133",
@@ -24,9 +41,9 @@ export const site = {
   modes: ["FTL", "LTL", "Expedited", "Dedicated"],
   stats: [
     { value: "2012", label: "Established" },
-    { value: "USA", label: "Trucking only" },
-    { value: "48", label: "State reach" },
-    { value: "24/7", label: "Ops mindset" },
+    { value: "ISO 9001", label: "Quality certified" },
+    { value: "GDP", label: "Distribution certified" },
+    { value: "Bonded", label: "Customs bonded" },
   ],
   services: [
     {

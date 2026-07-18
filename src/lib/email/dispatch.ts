@@ -129,11 +129,15 @@ async function sendViaFormSubmit(mail: DispatchMail): Promise<DispatchMailResult
     }
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://airoceanlogistics.us";
+
   const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(DISPATCH_EMAIL)}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Origin: siteUrl,
+      Referer: `${siteUrl}/`,
     },
     body: JSON.stringify(payload),
   });

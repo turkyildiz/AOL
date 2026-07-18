@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { site } from "@/content/site";
 
 export function Footer() {
@@ -8,17 +9,13 @@ export function Footer() {
     <footer className="border-t border-white/10 bg-navy-950 text-steel-200">
       <div className="container-max section-pad grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="lg:col-span-1">
-          <div className="mb-4 flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500 text-xs font-bold text-navy-950">
-              AOL
-            </span>
-            <div className="leading-tight">
-              <div className="text-sm font-semibold text-white">Air &amp; Ocean</div>
-              <div className="text-[11px] uppercase tracking-[0.14em] text-steel-400">
-                Logistics
-              </div>
-            </div>
-          </div>
+          <Link
+            href="/"
+            className="mb-4 inline-flex items-center rounded-xl bg-white px-2.5 py-1.5 shadow-md shadow-black/20"
+            aria-label={`${site.name} home`}
+          >
+            <BrandLogo variant="header" className="h-9 w-auto" />
+          </Link>
           <p className="max-w-xs text-sm leading-relaxed text-steel-400">
             {site.tagline}. Multi-mode freight solutions with operator accountability.
           </p>

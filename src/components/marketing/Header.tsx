@@ -2,26 +2,25 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { BrandLogo } from "@/components/marketing/BrandLogo";
 import { site } from "@/content/site";
 
 export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy-950/85 backdrop-blur-md">
-      <div className="container-max section-pad flex h-16 items-center justify-between sm:h-[4.25rem]">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500 text-xs font-bold tracking-tight text-navy-950 shadow-md shadow-amber-500/30">
-            AOL
-          </span>
-          <span className="hidden flex-col leading-tight sm:flex">
-            <span className="text-sm font-semibold tracking-wide text-white">
-              Air &amp; Ocean
-            </span>
-            <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-steel-400">
-              Logistics
-            </span>
-          </span>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy-950/90 backdrop-blur-md">
+      <div className="container-max section-pad flex h-[4.25rem] items-center justify-between sm:h-[4.75rem]">
+        <Link
+          href="/"
+          className="inline-flex items-center rounded-xl bg-white px-2.5 py-1.5 shadow-md shadow-black/20 transition hover:bg-steel-100"
+          aria-label={`${site.name} home`}
+        >
+          <BrandLogo
+            variant="header"
+            priority
+            className="h-8 w-auto sm:h-10"
+          />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

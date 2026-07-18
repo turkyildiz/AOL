@@ -34,6 +34,17 @@ Most copy, phone, email, services, and nav live in:
 src/content/site.ts
 ```
 
+## Brand assets
+
+Logos live in `public/brand/`:
+
+| File | Use |
+|------|-----|
+| `logo-header.jpg` | Header / footer horizontal lockup |
+| `logo.jpg` | Full logo (light background) |
+| `logo.png` | Dark-background mark variant |
+| `logo-master.pdf` | Print / source master |
+
 ## Deploy (Vercel)
 
 1. Import this GitHub repo in Vercel

@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.description,
+  icons: {
+    icon: [{ url: "/brand/logo.jpg", type: "image/jpeg" }],
+    apple: [{ url: "/brand/logo.jpg" }],
+  },
   openGraph: {
     title: site.name,
     description: site.description,
@@ -29,11 +33,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: "en_US",
     type: "website",
+    images: [{ url: "/brand/logo.jpg", width: 1084, height: 1084, alt: site.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: site.name,
     description: site.description,
+    images: ["/brand/logo.jpg"],
   },
   robots: { index: true, follow: true },
 };

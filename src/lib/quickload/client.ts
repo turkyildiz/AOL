@@ -152,15 +152,38 @@ function normalizeRates(data: unknown): QuickloadRate[] {
     .sort((a, b) => (a.totalAmount ?? 0) - (b.totalAmount ?? 0));
 }
 
-/** Simple FTL quote — matches payload that returns live marketplace rates */
+/**
+ * QuickLoad FTL marketplace keys equipment by truckTypeId (not the equipment string).
+ * Confirmed against live getftlquote:
+ *   1 = Flatbed, 2 = Van, 3 = Reefer
+ * Step deck / power-only map to the closest marketplace class.
+ */
+export function truckTypeIdForEquipment(equipment?: string | null): number {
+  const e = (equipment || "Van").toLowerCase();
+  if (e.includes("reefer") || e.includes("refriger")) return 3;
+  if (e.includes("flat") || e.includes("step") || e.includes("deck") || e.includes("rgn"))
+    return 1;
+  if (e.includes("power")) return 2; // no dedicated power-only marketplace id — quote as van capacity
+  return 2; // Dry Van default
+}
+
+export function equipmentLabelForTruckTypeId(id: number): string {
+  if (id === 1) return "Flatbed";
+  if (id === 3) return "Reefer";
+  return "Van";
+}
+
+/** Simple FTL quote — truckTypeId drives equipment class on the marketplace */
 export async function getFtlQuotes(input: {
   origin: QuoteLocation;
   destination: QuoteLocation;
   pickupDate: string;
   equipment?: string;
+  truckTypeId?: number;
 }): Promise<QuickloadRate[]> {
-  const equipment = input.equipment || "Van";
-  // Try primary simple payload first (proven to return rates)
+  const truckTypeId = input.truckTypeId ?? truckTypeIdForEquipment(input.equipment);
+  const equipment = equipmentLabelForTruckTypeId(truckTypeId);
+
   const data = await qlFetch<unknown>("/api/v1/quote/getftlquote?api-version=1.0", {
     quotePrimusRequest: {
       ...loc(input.origin, input.destination, input.pickupDate),
@@ -171,25 +194,9 @@ export async function getFtlQuotes(input: {
     },
     accessorialTypeIds: [],
     shipmentTypeId: 1,
-    truckTypeId: 1,
+    truckTypeId,
   });
-  let rates = normalizeRates(data);
-  if (rates.length === 0 && equipment !== "Van") {
-    const retry = await qlFetch<unknown>("/api/v1/quote/getftlquote?api-version=1.0", {
-      quotePrimusRequest: {
-        ...loc(input.origin, input.destination, input.pickupDate),
-        equipment: "Van",
-        accessorials: [],
-        freightInfo: null,
-        isFTL: true,
-      },
-      accessorialTypeIds: [],
-      shipmentTypeId: 1,
-      truckTypeId: 1,
-    });
-    rates = normalizeRates(retry);
-  }
-  return rates;
+  return normalizeRates(data);
 }
 
 export async function getLtlQuotes(input: {

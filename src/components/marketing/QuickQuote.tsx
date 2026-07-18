@@ -589,7 +589,8 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
               <p className="text-xs font-bold uppercase tracking-wider text-steel-500">Best price</p>
               <p className="text-3xl font-bold text-navy-900">{money(result.bestPrice)}</p>
               <p className="text-xs text-steel-500">
-                {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"} · live network
+                {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"}
+                {result.lane.equipment ? ` · ${result.lane.equipment}` : ""} · live network
               </p>
             </div>
             <button
@@ -661,7 +662,8 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
                   {money(result.bestPrice)}
                 </p>
                 <p className="mt-1 text-sm text-steel-300">
-                  {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"} · Air &amp; Ocean
+                  {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"}
+                  {result.lane.equipment ? ` · ${result.lane.equipment}` : ""} · Air &amp; Ocean
                   network
                 </p>
               </div>

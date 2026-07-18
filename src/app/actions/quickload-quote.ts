@@ -1,10 +1,12 @@
 "use server";
 
 import {
+  equipmentLabelForTruckTypeId,
   getFtlQuotes,
   getLtlQuotes,
   getQlQuote,
   isQuickloadConfigured,
+  truckTypeIdForEquipment,
   type QuickloadQlQuote,
   type QuickloadRate,
 } from "@/lib/quickload/client";
@@ -50,16 +52,6 @@ function parseLocation(city: string, state: string, zip: string) {
     zipcode: zip,
     country: "US",
   };
-}
-
-/** Map our equipment labels to QuickLoad-ish equipment names */
-function mapEquipment(eq: string): string {
-  const e = eq.toLowerCase();
-  if (e.includes("reefer")) return "Reefer";
-  if (e.includes("flat")) return "Flatbed";
-  if (e.includes("step")) return "Stepdeck";
-  if (e.includes("power")) return "Power Only";
-  return "Van";
 }
 
 export async function getInstantQuickloadQuote(
@@ -111,12 +103,16 @@ export async function getInstantQuickloadQuote(
     let qlQuote: QuickloadQlQuote | null = null;
 
     if (mode === "FTL") {
-      // Marketplace FTL is the reliable path; QL network quote is optional
+      // Marketplace keys off truckTypeId (1 Flatbed / 2 Van / 3 Reefer) — not the label alone
+      const truckTypeId = truckTypeIdForEquipment(equipment);
+      const qlEquipment = equipmentLabelForTruckTypeId(truckTypeId);
+
       const marketplace = await getFtlQuotes({
         origin,
         destination,
         pickupDate,
-        equipment: mapEquipment(equipment),
+        equipment: qlEquipment,
+        truckTypeId,
       });
       rates = marketplace ?? [];
 
@@ -126,7 +122,7 @@ export async function getInstantQuickloadQuote(
           destination,
           pickupDate,
           isFTL: true,
-          truckType: mapEquipment(equipment),
+          truckType: qlEquipment,
           freightInfo: null,
         });
       } catch {

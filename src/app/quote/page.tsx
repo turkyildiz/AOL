@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { LeadForm } from "@/components/marketing/LeadForm";
+import { QuickQuote } from "@/components/marketing/QuickQuote";
 import { PageHero } from "@/components/marketing/PageHero";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Request a Quote",
+  title: "Get a Quote",
   description:
-    "Request a U.S. trucking quote from Air & Ocean Logistics — FTL, LTL, expedited, and dedicated. Road freight only.",
+    "Instant U.S. trucking quotes via QuickLoad — FTL and partial/LTL rates with live pricing.",
 };
 
 export default function QuotePage() {
@@ -14,39 +14,34 @@ export default function QuotePage() {
     <>
       <PageHero
         eyebrow="Get a Quote"
-        title="Quote your next U.S. truck load"
-        description="Trucking only — FTL, LTL, expedited, or dedicated. Share the essentials and we come back with a clear rate and plan."
+        title="Instant freight quotes — FTL & partial"
+        description="Same idea as QuickLoad’s Quick Quote: enter the lane, get priced options in seconds. U.S. trucking only."
       />
 
-      <section className="section-pad py-16 sm:py-20">
-        <div className="container-wide grid gap-10 lg:grid-cols-5">
-          <div className="lg:col-span-2">
-            <div className="card-glow sticky top-28">
-              <h2 className="text-lg font-semibold text-navy-900">Faster quotes need</h2>
-              <ul className="mt-4 space-y-3 text-sm text-steel-500">
-                {[
-                  "U.S. origin and destination (city, ST)",
-                  "Pickup date and delivery window",
-                  "Equipment type (van, reefer, flatbed…)",
-                  "Weight, pallets, or dimensions",
-                  "Commodity and accessorials",
-                ].map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-red" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 rounded-xl bg-steel-50 px-4 py-3 text-sm text-navy-800">
-                Hot load? Call{" "}
-                <a href={site.contact.phoneHref} className="font-semibold text-brand-red">
-                  {site.contact.phone}
-                </a>
+      <section className="section-pad py-12 sm:py-16">
+        <div className="container-wide">
+          <QuickQuote />
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {[
+              {
+                t: "Live network rates",
+                d: "We query QuickLoad for marketplace and network pricing on your lane.",
+              },
+              {
+                t: "FTL & partial",
+                d: "Full truckload or LTL-style partial — pick the tab that matches your freight.",
+              },
+              {
+                t: "Ops backup",
+                d: `Prefer a human? Call ${site.contact.phone} or email ${site.contact.email}.`,
+              },
+            ].map((x) => (
+              <div key={x.t} className="card p-5">
+                <h3 className="font-semibold text-navy-900">{x.t}</h3>
+                <p className="mt-1 text-sm text-steel-500">{x.d}</p>
               </div>
-            </div>
-          </div>
-          <div className="lg:col-span-3">
-            <LeadForm variant="quote" />
+            ))}
           </div>
         </div>
       </section>

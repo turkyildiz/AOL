@@ -66,6 +66,21 @@ Contact and quote forms save to Supabase via server actions (`leads`, `quote_req
    - `SUPABASE_SERVICE_ROLE_KEY` (recommended, server-only)
 3. View rows in Supabase **Table Editor**
 
+## Instant quotes (QuickLoad)
+
+The `/quote` page mirrors QuickLoad’s **Quick Quote** (Full Truck / Partial) and prices lanes via the official Shipper API.
+
+1. Create a **shipper** account at [quickload.com](https://www.quickload.com)
+2. Set env vars (local + Vercel):
+   - `QUICKLOAD_API_BASE_URL=https://shipperapi.azurewebsites.net`
+   - `QUICKLOAD_EMAIL=your-shipper-login`
+   - `QUICKLOAD_PASSWORD=your-password`
+3. Redeploy
+
+Quotes call `getqlquote` + `getftlquote` / `getltlquote` and display **totalAmount** rates. Results are also saved to Supabase `quote_requests` when configured.
+
+Docs: [quickload.com/developer](https://www.quickload.com/developer) · Swagger: `https://shipperapi.azurewebsites.net/index.html`
+
 ## Roadmap
 
 1. **Done / in progress:** Marketing website  

@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about Air & Ocean Logistics — a freight brokerage with assets serving shippers since 2012.",
+    "Learn about Air & Ocean Logistics — a U.S.-only freight brokerage with assets serving American shippers since 2012.",
 };
 
 export default function AboutPage() {
@@ -14,8 +14,8 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="About"
-        title="Built for shippers who need more than a middleman"
-        description={`${site.name} combines brokerage reach with asset-backed capacity and operators who own the outcome.`}
+        title="Built for U.S. shippers who need more than a middleman"
+        description={`${site.name} combines nationwide brokerage reach with asset-backed capacity — United States freight only.`}
       />
 
       <section className="section-pad py-16 sm:py-20">
@@ -26,19 +26,22 @@ export default function AboutPage() {
             </h2>
             <div className="mt-5 space-y-4 text-base leading-relaxed text-steel-500">
               <p>
-                Founded in {site.since}, {site.legalName} set out to give shippers a clearer path
-                across air, ocean, and ground — without the black box experience that plagues so
-                many freight relationships.
+                Founded in {site.since}, {site.legalName} set out to give U.S. shippers a clearer
+                path across domestic air, truck, and intermodal — without the black-box experience
+                that plagues so many freight relationships.
               </p>
               <p>
-                We operate as a <strong className="font-semibold text-navy-900">freight brokerage with assets</strong>:
-                the flexibility of a broad network, plus controlled capacity when reliability cannot
-                be left to chance.
+                We operate as a{" "}
+                <strong className="font-semibold text-navy-900">
+                  freight brokerage with assets
+                </strong>
+                , focused entirely on the United States: the flexibility of a broad domestic
+                network, plus controlled capacity when reliability cannot be left to chance.
               </p>
               <p>
                 Today we support manufacturers, retailers, and industrial shippers who need
-                disciplined communication, multi-mode options, and a team that shows up when plans
-                change mid-voyage.
+                disciplined communication, multi-mode domestic options, and a team that shows up
+                when plans change on the road.
               </p>
             </div>
           </div>
@@ -69,7 +72,7 @@ export default function AboutPage() {
               },
               {
                 title: "Escalate early",
-                body: "When the market or the weather shifts, you hear it from us with options — not after the damage.",
+                body: "When weather, capacity, or the market shifts, you hear it from us with options — not after the damage.",
               },
             ].map((item) => (
               <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">

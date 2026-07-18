@@ -12,22 +12,22 @@ const serviceIcons = [
       strokeLinejoin="round"
     />
   </svg>,
-  // Ocean
-  <svg key="ocean" viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-    <path
-      d="M3 16c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0M4 10h3l2-4h6l2 4h3M7 10v4m10-4v4"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>,
   // Truck
   <svg key="truck" viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
     <path
       d="M3 7h11v9H3V7zm11 3h4l3 3v3h-7v-6zM7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm10 0a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
       stroke="currentColor"
       strokeWidth="1.6"
+      strokeLinejoin="round"
+    />
+  </svg>,
+  // Intermodal
+  <svg key="intermodal" viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
+    <path
+      d="M3 16c1.5-1 3-1 4.5 0s3 1 4.5 0 3-1 4.5 0 3 1 4.5 0M4 7h16v6H4V7zm3 9h2m6 0h2"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>,
@@ -63,13 +63,13 @@ export default function HomePage() {
 
         <div className="container-max section-pad relative grid items-center gap-12 py-20 sm:py-28 lg:grid-cols-12 lg:py-32">
           <div className="lg:col-span-7">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-steel-200 backdrop-blur">
+            <div className="mb-5 inline-flex flex-wrap items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-steel-200 backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-              {site.tagline} · Est. {site.since}
+              {site.tagline} · Est. {site.since} · {site.coverageNote}
             </div>
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.35rem] lg:leading-[1.08]">
-              Freight that moves with{" "}
-              <span className="text-amber-400">precision</span> — air, ocean, and ground.
+              U.S. freight that moves with{" "}
+              <span className="text-amber-400">precision</span> — air, truck, and intermodal.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-steel-200 sm:text-lg">
               {site.description}
@@ -153,7 +153,8 @@ export default function HomePage() {
                 Capacity across every critical mode
               </h2>
               <p className="mt-3 max-w-2xl text-base text-steel-500">
-                One accountable team for air, ocean, truck brokerage, and complex project moves.
+                One accountable team for domestic air, truck brokerage, intermodal, and complex
+                U.S. project moves.
               </p>
             </div>
             <Link href="/services" className="btn-dark shrink-0 self-start sm:self-auto">
@@ -218,15 +219,15 @@ export default function HomePage() {
               Broker agility. Asset-backed reliability.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-steel-500">
-              We operate as a freight brokerage with assets — combining owned and controlled capacity
-              with a vetted partner network. That means flexibility when the market is tight, and
-              options when your freight does not fit a one-size product.
+              We operate as a U.S. freight brokerage with assets — combining owned and controlled
+              capacity with a vetted domestic carrier network. That means flexibility when the
+              market is tight, and options when your freight does not fit a one-size product.
             </p>
             <ul className="mt-6 space-y-3">
               {[
-                "Air and ocean programs coordinated with ground execution",
+                "Domestic air programs coordinated with truck execution",
                 "Asset-backed options where schedule integrity matters",
-                "Partner network for surge, specialty, and global handoffs",
+                "U.S. partner network for surge, specialty, and multi-stop lanes",
               ].map((line) => (
                 <li key={line} className="flex gap-3 text-sm text-navy-800">
                   <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-600">

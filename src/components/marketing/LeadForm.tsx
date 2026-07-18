@@ -6,7 +6,15 @@ type LeadFormProps = {
   variant?: "contact" | "quote";
 };
 
-const modes = ["Air", "Ocean FCL", "Ocean LCL", "Truck FTL", "Truck LTL", "Multimodal", "Not sure"];
+const modes = [
+  "Domestic Air",
+  "Truck FTL",
+  "Truck LTL",
+  "Expedited",
+  "Intermodal",
+  "Multimodal",
+  "Not sure",
+];
 
 export function LeadForm({ variant = "contact" }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -128,7 +136,7 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
                 name="origin"
                 required
                 className="input"
-                placeholder="City, country or port/airport"
+                placeholder="City, ST (U.S. only)"
               />
             </div>
             <div>
@@ -140,18 +148,18 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
                 name="destination"
                 required
                 className="input"
-                placeholder="City, country or port/airport"
+                placeholder="City, ST (U.S. only)"
               />
             </div>
             <div>
               <label className="label" htmlFor="weight">
-                Weight / volume
+                Weight / dimensions
               </label>
               <input
                 id="weight"
                 name="weight"
                 className="input"
-                placeholder="e.g. 2,400 kg / 12 CBM"
+                placeholder="e.g. 12,000 lbs · 4 pallets"
               />
             </div>
             <div>
@@ -181,8 +189,8 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
           className="input resize-y"
           placeholder={
             variant === "quote"
-              ? "Incoterms, special handling, target delivery window..."
-              : "Tell us about your freight needs."
+              ? "Appointment windows, special handling, liftgate, residential..."
+              : "Tell us about your U.S. freight needs."
           }
         />
       </div>

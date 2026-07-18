@@ -7,7 +7,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Air freight, ocean FCL/LCL, truck brokerage, and project cargo from Air & Ocean Logistics.",
+    "U.S. domestic air freight, truck brokerage, intermodal, and project cargo from Air & Ocean Logistics.",
 };
 
 export default function ServicesPage() {
@@ -15,8 +15,8 @@ export default function ServicesPage() {
     <>
       <PageHero
         eyebrow="Services"
-        title="Multi-mode freight, one accountable team"
-        description="Whether your cargo needs altitude, ocean schedule, or road capacity, we design the move and own the execution."
+        title="Domestic multi-mode freight, one accountable team"
+        description="United States only. Whether your cargo needs air speed, truck capacity, or intermodal efficiency, we design the move and own the execution."
       />
 
       <section className="section-pad py-16 sm:py-20">
@@ -59,7 +59,8 @@ export default function ServicesPage() {
           <div>
             <h2 className="text-xl font-semibold text-navy-900">Not sure which mode fits?</h2>
             <p className="mt-1 text-sm text-steel-500">
-              Send the constraints — we will recommend air, ocean, ground, or a blend.
+              Send U.S. origin, destination, and constraints — we will recommend air, truck,
+              intermodal, or a blend.
             </p>
           </div>
           <Link href="/quote" className="btn-primary">

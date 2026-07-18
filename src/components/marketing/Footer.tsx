@@ -17,7 +17,7 @@ export function Footer() {
             <BrandLogo variant="header" className="h-9 w-auto" />
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-steel-400">
-            {site.tagline}. Multi-mode freight solutions with operator accountability.
+            {site.tagline}. Nationwide multi-mode solutions with operator accountability.
           </p>
         </div>
 
@@ -81,7 +81,9 @@ export function Footer() {
           <p>
             © {year} {site.legalName}. All rights reserved.
           </p>
-          <p>Freight brokerage with assets · Est. {site.since}</p>
+          <p>
+            {site.coverageNote} · Brokerage with assets · Est. {site.since}
+          </p>
         </div>
       </div>
     </footer>

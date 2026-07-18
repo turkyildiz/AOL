@@ -2,11 +2,12 @@ export const site = {
   name: "Air & Ocean Logistics",
   shortName: "AOL",
   legalName: "Air Ocean Logistics, Inc.",
-  tagline: "Freight brokerage with assets",
+  tagline: "U.S. freight brokerage with assets",
   description:
-    "Air & Ocean Logistics is a freight brokerage with assets — moving cargo by air, ocean, and ground with broker agility and capacity you can count on.",
+    "Air & Ocean Logistics is a United States freight brokerage with assets — moving cargo nationwide by air, intermodal, and ground with broker agility and capacity you can count on.",
   url: "https://airoceanlogistics.us",
   since: 2012,
+  coverageNote: "United States only",
   contact: {
     phone: "(312) 342-7133",
     phoneHref: "tel:+13123427133",
@@ -20,54 +21,54 @@ export const site = {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ],
-  modes: ["Air", "Ocean", "Ground", "Multimodal"],
+  modes: ["Air", "Truck", "Intermodal", "Expedited"],
   stats: [
     { value: "2012", label: "Established" },
-    { value: "3+", label: "Primary modes" },
-    { value: "24/7", label: "Ops mindset" },
+    { value: "USA", label: "Coverage only" },
+    { value: "48", label: "Contiguous states" },
     { value: "1", label: "Accountable team" },
   ],
   services: [
     {
       slug: "air-freight",
-      title: "Air Freight",
+      title: "Domestic Air Freight",
       summary:
-        "Time-critical shipments with airport-to-door coordination, charter options, and tight milestone control.",
+        "Time-critical U.S. air shipments with airport-to-door coordination and tight milestone control.",
       points: [
-        "Express & deferred air products",
-        "Airport pickup and last-mile handoff",
+        "Next-flight-out and deferred domestic air",
+        "Airport pickup and final-mile handoff",
         "AOG and high-value handling protocols",
-      ],
-    },
-    {
-      slug: "ocean-freight",
-      title: "Ocean Freight",
-      summary:
-        "FCL and LCL programs built for cost control, sailing reliability, and transparent container visibility.",
-      points: [
-        "FCL & LCL booking",
-        "Port drayage coordination",
-        "Customs-ready documentation support",
       ],
     },
     {
       slug: "truck-brokerage",
       title: "Truck & Brokerage",
       summary:
-        "Asset-backed flexibility plus a vetted carrier network for FTL, LTL, and expedited road moves.",
+        "Asset-backed flexibility plus a vetted U.S. carrier network for FTL, LTL, and expedited road moves.",
       points: [
-        "FTL, LTL, and expedited",
+        "FTL, LTL, and expedited nationwide",
         "Dedicated and spot capacity",
         "Vetted carrier compliance",
+      ],
+    },
+    {
+      slug: "intermodal-drayage",
+      title: "Intermodal & Drayage",
+      summary:
+        "Rail intermodal and port/rail ramp drayage across the U.S. — cost-efficient long hauls with controlled handoffs.",
+      points: [
+        "Domestic intermodal programs",
+        "Port and rail ramp drayage",
+        "Door-to-door coordination",
       ],
     },
     {
       slug: "project-special",
       title: "Project & Special Cargo",
       summary:
-        "Out-of-gauge, multi-leg, and high-touch moves planned end-to-end by operators who own the outcome.",
+        "Oversize, multi-stop, and high-touch U.S. moves planned end-to-end by operators who own the outcome.",
       points: [
-        "Multi-leg itineraries",
+        "Multi-stop domestic itineraries",
         "Special equipment sourcing",
         "Single point of accountability",
       ],
@@ -77,7 +78,7 @@ export const site = {
     {
       step: "01",
       title: "Request",
-      body: "Share origin, destination, cargo details, and timing. We respond with clear next steps.",
+      body: "Share U.S. origin, destination, cargo details, and timing. We respond with clear next steps.",
     },
     {
       step: "02",
@@ -105,12 +106,12 @@ export const site = {
   ],
   differentiators: [
     {
-      title: "Brokerage with assets",
-      body: "The reach of a brokerage network with owned and controlled capacity where reliability matters most.",
+      title: "USA focused",
+      body: "We move freight inside the United States only — clear lanes, domestic compliance, and no international handoff risk.",
     },
     {
-      title: "Multi-mode fluency",
-      body: "Air, ocean, and ground under one team — so your freight plan is not forced into a single product.",
+      title: "Brokerage with assets",
+      body: "The reach of a U.S. brokerage network with owned and controlled capacity where reliability matters most.",
     },
     {
       title: "Operator accountability",

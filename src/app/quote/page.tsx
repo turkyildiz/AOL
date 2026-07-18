@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "Request a Quote",
   description:
-    "Request a multi-mode freight quote from Air & Ocean Logistics — air, ocean, truck, and project cargo.",
+    "Request a U.S. multi-mode freight quote from Air & Ocean Logistics — domestic air, truck, intermodal, and project cargo.",
 };
 
 export default function QuotePage() {
@@ -14,8 +14,8 @@ export default function QuotePage() {
     <>
       <PageHero
         eyebrow="Get a Quote"
-        title="Tell us how your cargo needs to move"
-        description="Share the essentials. We will come back with mode options, transit windows, and clear next steps."
+        title="Tell us how your U.S. cargo needs to move"
+        description="United States shipments only. Share the essentials — we will come back with mode options, transit windows, and clear next steps."
       />
 
       <section className="section-pad py-16 sm:py-20">
@@ -25,9 +25,9 @@ export default function QuotePage() {
               <h2 className="text-lg font-semibold text-navy-900">What helps us quote faster</h2>
               <ul className="mt-4 space-y-3 text-sm text-steel-500">
                 {[
-                  "Origin and destination (city, port, or airport)",
+                  "U.S. origin and destination (city, ST)",
                   "Ready date and delivery target",
-                  "Weight, dimensions, or container count",
+                  "Weight, dimensions, or pallet count",
                   "Commodity and any hazmat / special handling",
                   "Preferred mode — or ask us to recommend",
                 ].map((item) => (

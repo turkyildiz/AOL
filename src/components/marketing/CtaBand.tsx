@@ -12,8 +12,8 @@ export function CtaBand() {
           Tell us about your next shipment
         </h2>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-steel-200 sm:text-base">
-          Air, ocean, or ground — we will shape a clear plan, a real quote, and a single team
-          accountable for the outcome.
+          U.S. air, truck, or intermodal — we will shape a clear plan, a real quote, and a single
+          team accountable for the outcome.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link href="/quote" className="btn-primary w-full sm:w-auto">

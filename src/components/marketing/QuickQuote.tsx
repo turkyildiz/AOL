@@ -4,7 +4,9 @@ import { FormEvent, useMemo, useState } from "react";
 import {
   getInstantQuickloadQuote,
   type InstantQuoteResult,
+  type QuoteLaneContext,
 } from "@/app/actions/quickload-quote";
+import { submitTargetRate } from "@/app/actions/target-rate";
 import { site } from "@/content/site";
 
 type Mode = "FTL" | "Partial";
@@ -31,6 +33,250 @@ type QuickQuoteProps = {
   /** hero = compact card for video landing; page = full two-column layout */
   layout?: Layout;
 };
+
+type TargetState = "idle" | "loading" | "done" | "error";
+
+function TargetRatePanel({
+  marketBest,
+  lane,
+  compact,
+}: {
+  marketBest: number | null;
+  lane: QuoteLaneContext;
+  compact?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState<TargetState>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [targetValue, setTargetValue] = useState(() => {
+    if (marketBest != null && marketBest > 0) {
+      return String(Math.round(marketBest * 0.9));
+    }
+    return "";
+  });
+
+  const targetNum = Number(String(targetValue).replace(/[$,\s]/g, ""));
+  const ratio =
+    marketBest != null && marketBest > 0 && Number.isFinite(targetNum) && targetNum > 0
+      ? targetNum / marketBest
+      : null;
+  const aggressive = ratio != null && ratio < 0.7;
+  const hot = ratio != null && ratio >= 0.85;
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    formData.set("marketBest", marketBest != null ? String(marketBest) : "");
+    formData.set("targetRate", String(targetValue).replace(/[$,\s]/g, ""));
+    formData.set("mode", lane.mode === "Partial" ? "LTL / Partial" : "FTL");
+    formData.set("equipment", lane.equipment);
+    formData.set("origin", lane.origin);
+    formData.set("destination", lane.destination);
+    formData.set("readyDate", lane.readyDate);
+    formData.set("weight", lane.weight);
+    formData.set("cargo", lane.cargo);
+
+    try {
+      const res = await submitTargetRate(formData);
+      if (!res.ok) {
+        setError(res.error);
+        setStatus("error");
+        return;
+      }
+      setSuccessMsg(res.message);
+      setStatus("done");
+    } catch {
+      setError("Could not submit. Please try again or call ops.");
+      setStatus("error");
+    }
+  }
+
+  if (status === "done" && successMsg) {
+    return (
+      <div
+        className={`rounded-xl border border-brand-green/30 bg-green-50 ${
+          compact ? "mt-3 px-3 py-3" : "mt-5 px-4 py-4"
+        }`}
+      >
+        <p className="text-sm font-semibold text-navy-900">Target received</p>
+        <p className="mt-1 text-sm leading-relaxed text-steel-600">{successMsg}</p>
+        <p className="mt-2 text-xs text-steel-500">
+          Questions?{" "}
+          <a href={site.contact.phoneHref} className="font-semibold text-navy-900">
+            {site.contact.phone}
+          </a>
+        </p>
+      </div>
+    );
+  }
+
+  if (!open) {
+    return (
+      <div className={compact ? "mt-3" : "mt-5"}>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="w-full rounded-lg border border-dashed border-steel-300 bg-white px-3 py-3 text-left transition hover:border-brand-orange/50 hover:bg-orange-50/40"
+        >
+          <p className="text-sm font-semibold text-navy-900">
+            Prefer a different number?
+          </p>
+          <p className="mt-0.5 text-xs text-steel-500">
+            Submit your target rate — we&apos;ll try to cover this load
+          </p>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={onSubmit}
+      className={`rounded-xl border border-steel-200 bg-white ${
+        compact ? "mt-3 space-y-2.5 p-3" : "mt-5 space-y-3 p-4"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold text-navy-900">Submit your target rate</p>
+          <p className="mt-0.5 text-xs text-steel-500">
+            {marketBest != null
+              ? `Market best ${money(marketBest)} · we work toward your number`
+              : "Ops will work this load against capacity"}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="text-xs font-semibold text-steel-500 hover:text-navy-900"
+          onClick={() => setOpen(false)}
+        >
+          Close
+        </button>
+      </div>
+
+      <div>
+        <label className="label" htmlFor="targetRate">
+          Your target ($)
+        </label>
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-steel-500">
+            $
+          </span>
+          <input
+            id="targetRate"
+            name="targetRate"
+            type="number"
+            min={1}
+            step={1}
+            required
+            className="input !pl-7"
+            value={targetValue}
+            onChange={(e) => setTargetValue(e.target.value)}
+            placeholder="e.g. 3200"
+          />
+        </div>
+        {ratio != null && Number.isFinite(targetNum) && targetNum > 0 && (
+          <p
+            className={`mt-1.5 text-xs ${
+              aggressive
+                ? "text-brand-orange"
+                : hot
+                  ? "text-brand-green"
+                  : "text-steel-500"
+            }`}
+          >
+            {aggressive
+              ? "Aggressive vs market — still send it; ops will review."
+              : hot
+                ? "Strong target — good chance we can work this."
+                : `${Math.round((1 - ratio) * 100)}% under market — we'll try to cover.`}
+          </p>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-3 text-xs text-navy-900">
+        <label className="inline-flex cursor-pointer items-center gap-1.5">
+          <input
+            type="checkbox"
+            name="flexiblePickup"
+            className="rounded border-steel-300 text-brand-orange focus:ring-brand-orange"
+          />
+          Flexible pickup
+        </label>
+        <label className="inline-flex cursor-pointer items-center gap-1.5">
+          <input
+            type="checkbox"
+            name="canWait"
+            className="rounded border-steel-300 text-brand-orange focus:ring-brand-orange"
+          />
+          Can wait +1 day
+        </label>
+      </div>
+
+      <div className={`grid gap-2 ${compact ? "" : "sm:grid-cols-2"}`}>
+        <input
+          name="email"
+          type="email"
+          required
+          className="input"
+          placeholder="Email *"
+          autoComplete="email"
+        />
+        <input
+          name="phone"
+          type="tel"
+          required
+          className="input"
+          placeholder="Phone *"
+          autoComplete="tel"
+        />
+        {!compact && (
+          <>
+            <input name="name" className="input" placeholder="Name" autoComplete="name" />
+            <input name="company" className="input" placeholder="Company" />
+          </>
+        )}
+      </div>
+
+      {!compact && (
+        <div>
+          <label className="label" htmlFor="targetNotes">
+            Notes (optional)
+          </label>
+          <textarea
+            id="targetNotes"
+            name="notes"
+            rows={2}
+            className="input min-h-[64px] resize-y"
+            placeholder="Commodity, appointments, special equipment…"
+          />
+        </div>
+      )}
+
+      {(status === "error" || error) && (
+        <div className="rounded-md border border-brand-orange/30 bg-orange-50 px-3 py-2 text-sm text-brand-orange">
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        className="btn-primary w-full !py-3 text-sm"
+        disabled={status === "loading"}
+      >
+        {status === "loading" ? "Sending…" : "Work this load at my rate"}
+      </button>
+
+      <p className="text-center text-[11px] leading-snug text-steel-500">
+        Not a booking guarantee — ops matches capacity and confirms if we can cover your target.
+      </p>
+    </form>
+  );
+}
 
 export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
   const [mode, setMode] = useState<Mode>("FTL");
@@ -372,6 +618,7 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
               ))}
             </ul>
           )}
+          <TargetRatePanel marketBest={result.bestPrice} lane={result.lane} compact />
         </div>
       )}
     </div>
@@ -393,7 +640,7 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
           {status === "idle" && (
             <p className="mt-4 text-sm leading-relaxed text-steel-500">
               Enter lane details and click <strong>Get a Quote</strong>. We pull live network rates
-              and show priced options here.
+              and show priced options here. Too high? You can submit a target rate after.
             </p>
           )}
 
@@ -420,7 +667,7 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
               </div>
 
               {result.rates.length > 0 && (
-                <ul className="max-h-72 space-y-2 overflow-y-auto">
+                <ul className="max-h-52 space-y-2 overflow-y-auto">
                   {result.rates.map((r, idx) => (
                     <li
                       key={`${r.rateId ?? idx}-${r.totalAmount}`}
@@ -439,6 +686,8 @@ export function QuickQuote({ layout = "page" }: QuickQuoteProps) {
                   ))}
                 </ul>
               )}
+
+              <TargetRatePanel marketBest={result.bestPrice} lane={result.lane} />
 
               <button
                 type="button"

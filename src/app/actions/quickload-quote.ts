@@ -10,6 +10,16 @@ import {
 } from "@/lib/quickload/client";
 import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/admin";
 
+export type QuoteLaneContext = {
+  mode: "FTL" | "Partial";
+  origin: string;
+  destination: string;
+  readyDate: string;
+  equipment: string;
+  weight: string;
+  cargo: string;
+};
+
 export type InstantQuoteResult =
   | {
       ok: true;
@@ -18,6 +28,8 @@ export type InstantQuoteResult =
       rates: QuickloadRate[];
       bestPrice: number | null;
       message?: string;
+      /** Snapshot for target-rate offers after quote */
+      lane: QuoteLaneContext;
     }
   | { ok: false; error: string };
 
@@ -214,12 +226,23 @@ export async function getInstantQuickloadQuote(
       };
     }
 
+    const lane: QuoteLaneContext = {
+      mode,
+      origin: `${origin.city}, ${origin.state} ${origin.zipcode}`.trim(),
+      destination: `${destination.city}, ${destination.state} ${destination.zipcode}`.trim(),
+      readyDate: pickupDate,
+      equipment: mode === "FTL" ? equipment : "Partial / LTL",
+      weight: weight ? String(weight) : "",
+      cargo: commodity,
+    };
+
     return {
       ok: true,
       mode,
       qlQuote,
       rates: rates.slice(0, 12),
       bestPrice,
+      lane,
       message:
         bestPrice != null
           ? undefined

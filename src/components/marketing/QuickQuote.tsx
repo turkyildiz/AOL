@@ -322,7 +322,7 @@ export function QuickQuote() {
             </button>
 
             <p className="text-center text-xs text-steel-500">
-              Rates via QuickLoad network · U.S. trucking only · Need help?{" "}
+              Rates via Air &amp; Ocean network · U.S. trucking only · Need help?{" "}
               <a href={site.contact.phoneHref} className="font-semibold text-navy-900">
                 {site.contact.phone}
               </a>

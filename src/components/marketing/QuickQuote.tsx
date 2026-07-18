@@ -339,15 +339,15 @@ export function QuickQuote() {
 
           {status === "idle" && (
             <p className="mt-4 text-sm leading-relaxed text-steel-500">
-              Enter lane details and click <strong>Get a Quote</strong>. We query QuickLoad and show
-              priced options here — just like their platform.
+              Enter lane details and click <strong>Get a Quote</strong>. We pull live network rates
+              and show priced options here.
             </p>
           )}
 
           {status === "loading" && (
             <div className="mt-8 flex flex-col items-center gap-3 py-10 text-center">
               <div className="h-10 w-10 animate-spin rounded-full border-2 border-navy-900/15 border-t-brand-red" />
-              <p className="text-sm font-medium text-navy-900">Talking to QuickLoad…</p>
+              <p className="text-sm font-medium text-navy-900">Getting your rate…</p>
               <p className="text-xs text-steel-500">Fetching FTL / LTL rates for your lane</p>
             </div>
           )}
@@ -362,7 +362,7 @@ export function QuickQuote() {
                   {money(result.bestPrice)}
                 </p>
                 <p className="mt-1 text-sm text-steel-300">
-                  {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"} · from QuickLoad
+                  {result.mode === "FTL" ? "Full truckload" : "Partial / LTL"} · Air &amp; Ocean network
                 </p>
               </div>
 
@@ -370,7 +370,7 @@ export function QuickQuote() {
                 <div className="rounded-xl border border-navy-900/8 bg-steel-50 px-4 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-navy-900">QuickLoad rate</p>
+                      <p className="text-sm font-semibold text-navy-900">Network rate</p>
                       <p className="text-xs text-steel-500">
                         Transit ~{result.qlQuote.transitDays ?? "—"} days
                         {result.qlQuote.quoteId ? ` · Quote #${result.qlQuote.quoteId}` : ""}

@@ -13,8 +13,8 @@ export function Footer() {
             <BrandLogo variant="header" className="h-9 w-auto" />
           </Link>
           <p className="max-w-sm text-sm leading-relaxed text-steel-400">
-            U.S. trucking brokerage with assets. Instant FTL &amp; partial quotes powered by the
-            QuickLoad network.
+            U.S. trucking brokerage with assets. Instant FTL &amp; partial quotes on the Air &amp;
+            Ocean network.
           </p>
         </div>
 

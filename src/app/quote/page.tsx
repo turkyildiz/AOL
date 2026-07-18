@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "Get a Quote",
   description:
-    "Instant U.S. trucking quotes via QuickLoad — FTL and partial/LTL rates with live pricing.",
+    "Instant U.S. trucking quotes from Air & Ocean Logistics — FTL and partial/LTL rates with live pricing.",
 };
 
 export default function QuotePage() {
@@ -15,7 +15,7 @@ export default function QuotePage() {
       <PageHero
         eyebrow="Get a Quote"
         title="Instant freight quotes — FTL & partial"
-        description="Same idea as QuickLoad’s Quick Quote: enter the lane, get priced options in seconds. U.S. trucking only."
+        description="Enter the lane, get priced options in seconds. U.S. trucking only — full truckload and partial."
       />
 
       <section className="section-pad py-12 sm:py-16">
@@ -26,7 +26,7 @@ export default function QuotePage() {
             {[
               {
                 t: "Live network rates",
-                d: "We query QuickLoad for marketplace and network pricing on your lane.",
+                d: "We pull marketplace and network pricing for your U.S. trucking lane.",
               },
               {
                 t: "FTL & partial",

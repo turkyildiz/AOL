@@ -57,7 +57,7 @@ export async function getInstantQuickloadQuote(
     return {
       ok: false,
       error:
-        "Instant pricing is not connected yet. Add QuickLoad shipper credentials (QUICKLOAD_EMAIL / QUICKLOAD_PASSWORD) on the server, or call ops for a manual quote.",
+        "Instant pricing is not connected yet. Please call ops for a manual quote.",
     };
   }
 
@@ -210,7 +210,7 @@ export async function getInstantQuickloadQuote(
       return {
         ok: false,
         error:
-          "QuickLoad returned no rates for this lane. Try different ZIPs/dates, or contact ops for a manual quote.",
+          "No rates returned for this lane. Try different ZIPs/dates, or contact ops for a manual quote.",
       };
     }
 
@@ -230,7 +230,7 @@ export async function getInstantQuickloadQuote(
     const msg = err instanceof Error ? err.message : "Quote failed";
     return {
       ok: false,
-      error: `Could not get a QuickLoad price right now. ${msg.includes("auth") ? "Check QuickLoad login credentials. " : ""}You can still call ops for a manual quote.`,
+      error: `Could not get a live price right now. You can still call ops for a manual quote.`,
     };
   }
 }

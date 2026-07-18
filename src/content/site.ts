@@ -2,12 +2,12 @@ export const site = {
   name: "Air & Ocean Logistics",
   shortName: "AOL",
   legalName: "Air Ocean Logistics, Inc.",
-  tagline: "U.S. freight brokerage with assets",
+  tagline: "U.S. trucking brokerage with assets",
   description:
-    "Air & Ocean Logistics is a United States freight brokerage with assets — moving cargo nationwide by air, intermodal, and ground with broker agility and capacity you can count on.",
+    "Air & Ocean Logistics is a United States trucking brokerage with assets — FTL, LTL, and expedited capacity nationwide. No air. No ocean. Just freight that moves on the road.",
   url: "https://airoceanlogistics.us",
   since: 2012,
-  coverageNote: "United States only",
+  coverageNote: "United States only · Trucking only",
   contact: {
     phone: "(312) 342-7133",
     phoneHref: "tel:+13123427133",
@@ -21,56 +21,56 @@ export const site = {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ],
-  modes: ["Air", "Truck", "Intermodal", "Expedited"],
+  modes: ["FTL", "LTL", "Expedited", "Dedicated"],
   stats: [
     { value: "2012", label: "Established" },
-    { value: "USA", label: "Coverage only" },
-    { value: "48", label: "Contiguous states" },
-    { value: "1", label: "Accountable team" },
+    { value: "USA", label: "Trucking only" },
+    { value: "48", label: "State reach" },
+    { value: "24/7", label: "Ops mindset" },
   ],
   services: [
     {
-      slug: "air-freight",
-      title: "Domestic Air Freight",
+      slug: "ftl",
+      title: "Full Truckload (FTL)",
       summary:
-        "Time-critical U.S. air shipments with airport-to-door coordination and tight milestone control.",
+        "Dedicated trailers for dry van, reefer, and flatbed moves across the contiguous U.S. — priced clear, covered tight.",
       points: [
-        "Next-flight-out and deferred domestic air",
-        "Airport pickup and final-mile handoff",
-        "AOG and high-value handling protocols",
+        "Dry van, reefer, and flatbed",
+        "Live load / drop trailer options",
+        "Lane pricing with transit windows",
       ],
     },
     {
-      slug: "truck-brokerage",
-      title: "Truck & Brokerage",
+      slug: "ltl",
+      title: "Less-Than-Truckload (LTL)",
       summary:
-        "Asset-backed flexibility plus a vetted U.S. carrier network for FTL, LTL, and expedited road moves.",
+        "Cost-efficient pallet freight when you don’t need the whole trailer — with pickup discipline and delivery accountability.",
       points: [
-        "FTL, LTL, and expedited nationwide",
-        "Dedicated and spot capacity",
-        "Vetted carrier compliance",
+        "Palletized freight programs",
+        "Density and class guidance",
+        "Appointment and liftgate coordination",
       ],
     },
     {
-      slug: "intermodal-drayage",
-      title: "Intermodal & Drayage",
+      slug: "expedited",
+      title: "Expedited & Time-Critical",
       summary:
-        "Rail intermodal and port/rail ramp drayage across the U.S. — cost-efficient long hauls with controlled handoffs.",
+        "When the line is down or the window is brutal — exclusive-use and team capacity built for speed.",
       points: [
-        "Domestic intermodal programs",
-        "Port and rail ramp drayage",
-        "Door-to-door coordination",
+        "Exclusive-use and team drivers",
+        "Hot-shot and emergency coverage",
+        "Milestone updates that actually land",
       ],
     },
     {
-      slug: "project-special",
-      title: "Project & Special Cargo",
+      slug: "dedicated",
+      title: "Dedicated & Recurring Lanes",
       summary:
-        "Oversize, multi-stop, and high-touch U.S. moves planned end-to-end by operators who own the outcome.",
+        "Repeat capacity for shippers who need consistency — asset-backed options where reliability is non-negotiable.",
       points: [
-        "Multi-stop domestic itineraries",
-        "Special equipment sourcing",
-        "Single point of accountability",
+        "Scheduled recurring lanes",
+        "Asset-backed flexibility",
+        "Single ops owner per account",
       ],
     },
   ],
@@ -78,46 +78,47 @@ export const site = {
     {
       step: "01",
       title: "Request",
-      body: "Share U.S. origin, destination, cargo details, and timing. We respond with clear next steps.",
+      body: "Share origin, destination, equipment, weight, and pickup window. We respond fast with next steps.",
     },
     {
       step: "02",
       title: "Quote",
-      body: "Mode options, transit windows, and pricing — presented so you can decide with confidence.",
+      body: "Clear rate, equipment type, and transit — no black-box math, no mystery accessorials up front.",
     },
     {
       step: "03",
       title: "Book",
-      body: "We secure capacity, align parties, and lock milestones before cargo moves.",
+      body: "We secure capacity, confirm the driver plan, and lock pickup before the clock starts.",
     },
     {
       step: "04",
       title: "Track",
-      body: "Proactive updates, document control, and exception handling through delivery.",
+      body: "Proactive check-calls, exception alerts, and POD handoff through final delivery.",
     },
   ],
   industries: [
     "Manufacturing",
     "Retail & eCommerce",
     "Automotive",
+    "Food & beverage",
     "Industrial equipment",
-    "Consumer goods",
-    "Healthcare logistics",
+    "Building materials",
   ],
   differentiators: [
     {
-      title: "USA focused",
-      body: "We move freight inside the United States only — clear lanes, domestic compliance, and no international handoff risk.",
+      title: "Trucking only",
+      body: "We don’t book air or ocean carriage. Every file is road freight — FTL, LTL, expedited, and dedicated U.S. lanes.",
+    },
+    {
+      title: "USA only",
+      body: "Contiguous U.S. coverage with operators who know domestic compliance, appointments, and highway reality.",
     },
     {
       title: "Brokerage with assets",
-      body: "The reach of a U.S. brokerage network with owned and controlled capacity where reliability matters most.",
-    },
-    {
-      title: "Operator accountability",
-      body: "Real people who own the file, escalate early, and communicate like partners — not ticket queues.",
+      body: "Network reach plus owned and controlled capacity when the market tightens and your freight cannot wait.",
     },
   ],
+  equipment: ["Dry Van", "Reefer", "Flatbed", "Step Deck", "Hot Shot", "Power Only"],
 } as const;
 
 export type Service = (typeof site.services)[number];

@@ -6,25 +6,25 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "Coverage",
   description:
-    "Nationwide United States freight coverage from Air & Ocean Logistics — truck, air, intermodal, and expedited.",
+    "Nationwide U.S. trucking coverage from Air & Ocean Logistics — FTL, LTL, and expedited. United States road freight only.",
 };
 
 const regions = [
   {
     title: "Midwest hub",
-    body: "Schaumburg / Chicago-area strength for manufacturing, distribution, and cross-country origin work.",
+    body: "Schaumburg / Chicago-area strength for manufacturing, distribution, and cross-country origins.",
   },
   {
     title: "East & Southeast",
-    body: "Lane coverage for retail, industrial, and coastal port-adjacent domestic moves.",
+    body: "Retail, industrial, and coastal corridor trucking with appointment-sensitive deliveries.",
   },
   {
     title: "South Central & Southwest",
-    body: "FTL, LTL, and expedited capacity across high-volume U.S. corridors.",
+    body: "High-volume FTL and LTL lanes across Texas, the Gulf, and southwest distribution hubs.",
   },
   {
     title: "West Coast & Mountain",
-    body: "Domestic air, intermodal, and truck programs tied to ramps, airports, and regional DCs.",
+    body: "Long-haul and regional capacity into CA, PNW, and mountain markets — dry van and specialty.",
   },
 ];
 
@@ -33,30 +33,26 @@ export default function CoveragePage() {
     <>
       <PageHero
         eyebrow="Coverage"
-        title="United States only — nationwide execution"
-        description="We move freight inside the USA. No international bookings — just domestic capacity, clear lanes, and operators who own the file."
+        title="United States trucking — nationwide lanes"
+        description="Contiguous U.S. road freight only. No international. No air. No ocean. Just highway capacity you can book with confidence."
       />
 
       <section className="section-pad py-16 sm:py-20">
-        <div className="container-max">
-          <div className="card mb-10 border-amber-400/30 bg-amber-400/10">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700">
-              Service area
-            </p>
-            <h2 className="mt-2 text-xl font-semibold text-navy-900 sm:text-2xl">
+        <div className="container-wide">
+          <div className="card-glow mb-10 border-brand-red/15 bg-gradient-to-br from-white to-steel-50 p-8">
+            <p className="eyebrow">Service area</p>
+            <h2 className="mt-2 text-2xl font-semibold text-navy-900 sm:text-3xl">
               {site.coverageNote}
             </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-800/80">
-              Air &amp; Ocean Logistics brokers and moves cargo within the United States.
-              If your shipment starts or ends outside the U.S., we are not the right fit —
-              and we will tell you that up front.
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-steel-500">
+              Air &amp; Ocean Logistics moves freight by truck within the United States. If your
+              shipment requires air or ocean carriage — or starts/ends outside the U.S. — we are not
+              the right fit, and we will tell you that up front.
             </p>
           </div>
 
           <div className="mb-10">
-            <h2 className="text-2xl font-semibold tracking-tight text-navy-900 sm:text-3xl">
-              Modes we run
-            </h2>
+            <h2 className="display text-2xl text-navy-900 sm:text-3xl">What we book</h2>
             <div className="mt-5 flex flex-wrap gap-2">
               {site.modes.map((mode) => (
                 <span
@@ -69,24 +65,22 @@ export default function CoveragePage() {
             </div>
           </div>
 
-          <h2 className="mb-5 text-2xl font-semibold tracking-tight text-navy-900 sm:text-3xl">
-            Regional coverage
-          </h2>
+          <h2 className="display mb-5 text-2xl text-navy-900 sm:text-3xl">Regional strength</h2>
           <div className="grid gap-5 sm:grid-cols-2">
             {regions.map((region) => (
-              <article key={region.title} className="card">
+              <article key={region.title} className="card-glow">
                 <h3 className="text-lg font-semibold text-navy-900">{region.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-steel-500">{region.body}</p>
               </article>
             ))}
           </div>
 
-          <div className="card mt-8">
-            <h3 className="text-lg font-semibold text-navy-900">Cross-country U.S. lanes</h3>
+          <div className="card mt-8 p-8">
+            <h3 className="text-lg font-semibold text-navy-900">Cross-country & multi-stop</h3>
             <p className="mt-2 text-sm leading-relaxed text-steel-500">
-              Coast-to-coast and multi-stop domestic programs are core to what we do. Share origin
-              city/state, destination city/state, and cargo details — we will build the plan with
-              the right mode mix.
+              Coast-to-coast FTL, multi-stop routes, and recurring dedicated lanes are core. Share
+              origin city/state, destination city/state, equipment, and pickup window — we build
+              the plan.
             </p>
           </div>
         </div>

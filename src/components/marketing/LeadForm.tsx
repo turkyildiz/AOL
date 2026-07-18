@@ -6,15 +6,8 @@ type LeadFormProps = {
   variant?: "contact" | "quote";
 };
 
-const modes = [
-  "Domestic Air",
-  "Truck FTL",
-  "Truck LTL",
-  "Expedited",
-  "Intermodal",
-  "Multimodal",
-  "Not sure",
-];
+const modes = ["FTL", "LTL", "Expedited", "Dedicated / recurring", "Not sure"];
+const equipment = ["Dry Van", "Reefer", "Flatbed", "Step Deck", "Hot Shot", "Power Only", "Other"];
 
 export function LeadForm({ variant = "contact" }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -28,17 +21,15 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
     const payload = Object.fromEntries(data.entries());
 
     try {
-      // Placeholder until Supabase is wired — still captures UX + mailto fallback path
       const subject =
         variant === "quote"
-          ? `Quote request: ${payload.origin || "N/A"} → ${payload.destination || "N/A"}`
+          ? `Truck quote: ${payload.origin || "N/A"} → ${payload.destination || "N/A"}`
           : `Website contact from ${payload.name || "prospect"}`;
 
       const body = Object.entries(payload)
         .map(([k, v]) => `${k}: ${v}`)
         .join("\n");
 
-      // Store a local success path; email opens as interim handoff
       console.info("[AOL lead]", payload);
       window.open(
         `mailto:quotes@airoceanlogistics.us?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
@@ -54,11 +45,12 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
 
   if (status === "success") {
     return (
-      <div className="card border-amber-400/40 bg-amber-400/10">
-        <h3 className="text-lg font-semibold text-navy-900">Request received</h3>
-        <p className="mt-2 text-sm leading-relaxed text-navy-800/80">
-          Thanks — your details were prepared for our team. If your email client opened, hit send.
-          You can also call us directly for time-critical moves.
+      <div className="card-glow border-brand-red/20 bg-gradient-to-br from-white to-steel-50">
+        <p className="eyebrow">Request received</p>
+        <h3 className="mt-2 text-xl font-semibold text-navy-900">We&apos;re on it</h3>
+        <p className="mt-2 text-sm leading-relaxed text-steel-500">
+          Your details were prepared for our team. If your email client opened, hit send. For
+          time-critical loads, call us directly.
         </p>
         <button type="button" className="btn-dark mt-6" onClick={() => setStatus("idle")}>
           Submit another
@@ -68,7 +60,7 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="card space-y-5">
+    <form onSubmit={onSubmit} className="card-glow space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="name">
@@ -104,82 +96,95 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
       </div>
 
       {variant === "quote" && (
-        <>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label className="label" htmlFor="mode">
-                Preferred mode
-              </label>
-              <select id="mode" name="mode" className="input" defaultValue="">
-                <option value="" disabled>
-                  Select mode
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label className="label" htmlFor="mode">
+              Service type
+            </label>
+            <select id="mode" name="mode" className="input" defaultValue="">
+              <option value="" disabled>
+                Select
+              </option>
+              {modes.map((m) => (
+                <option key={m} value={m}>
+                  {m}
                 </option>
-                {modes.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="label" htmlFor="readyDate">
-                Ready date
-              </label>
-              <input id="readyDate" name="readyDate" type="date" className="input" />
-            </div>
-            <div>
-              <label className="label" htmlFor="origin">
-                Origin
-              </label>
-              <input
-                id="origin"
-                name="origin"
-                required
-                className="input"
-                placeholder="City, ST (U.S. only)"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="destination">
-                Destination
-              </label>
-              <input
-                id="destination"
-                name="destination"
-                required
-                className="input"
-                placeholder="City, ST (U.S. only)"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="weight">
-                Weight / dimensions
-              </label>
-              <input
-                id="weight"
-                name="weight"
-                className="input"
-                placeholder="e.g. 12,000 lbs · 4 pallets"
-              />
-            </div>
-            <div>
-              <label className="label" htmlFor="cargo">
-                Cargo description
-              </label>
-              <input
-                id="cargo"
-                name="cargo"
-                className="input"
-                placeholder="Commodity, packaging, hazmat?"
-              />
-            </div>
+              ))}
+            </select>
           </div>
-        </>
+          <div>
+            <label className="label" htmlFor="equipment">
+              Equipment
+            </label>
+            <select id="equipment" name="equipment" className="input" defaultValue="">
+              <option value="" disabled>
+                Select
+              </option>
+              {equipment.map((eq) => (
+                <option key={eq} value={eq}>
+                  {eq}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="label" htmlFor="origin">
+              Origin
+            </label>
+            <input
+              id="origin"
+              name="origin"
+              required
+              className="input"
+              placeholder="City, ST (U.S.)"
+            />
+          </div>
+          <div>
+            <label className="label" htmlFor="destination">
+              Destination
+            </label>
+            <input
+              id="destination"
+              name="destination"
+              required
+              className="input"
+              placeholder="City, ST (U.S.)"
+            />
+          </div>
+          <div>
+            <label className="label" htmlFor="readyDate">
+              Pickup date
+            </label>
+            <input id="readyDate" name="readyDate" type="date" className="input" />
+          </div>
+          <div>
+            <label className="label" htmlFor="weight">
+              Weight / pallets
+            </label>
+            <input
+              id="weight"
+              name="weight"
+              className="input"
+              placeholder="e.g. 42,000 lbs · 26 pallets"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="label" htmlFor="cargo">
+              Commodity
+            </label>
+            <input
+              id="cargo"
+              name="cargo"
+              className="input"
+              placeholder="Commodity, dimensions, hazmat?"
+            />
+          </div>
+        </div>
       )}
 
       <div>
         <label className="label" htmlFor="message">
-          {variant === "quote" ? "Additional details" : "How can we help?"}
+          {variant === "quote" ? "Accessorials & notes" : "How can we help?"}
         </label>
         <textarea
           id="message"
@@ -189,21 +194,21 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
           className="input resize-y"
           placeholder={
             variant === "quote"
-              ? "Appointment windows, special handling, liftgate, residential..."
-              : "Tell us about your U.S. freight needs."
+              ? "Liftgate, appointment, team drivers, drop trailer, residential..."
+              : "Tell us about your U.S. trucking needs."
           }
         />
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-700">Something went wrong. Please call or email us directly.</p>
+        <p className="text-sm text-brand-red">Something went wrong. Please call or email us directly.</p>
       )}
 
       <button type="submit" className="btn-primary w-full sm:w-auto" disabled={status === "submitting"}>
         {status === "submitting"
           ? "Sending…"
           : variant === "quote"
-            ? "Submit quote request"
+            ? "Submit truck quote"
             : "Send message"}
       </button>
     </form>

@@ -68,14 +68,20 @@ async function getToken(): Promise<string> {
     throw new Error("QuickLoad credentials are not configured");
   }
 
+  // Token endpoint expects form-urlencoded (JSON returns 415)
+  const body = new URLSearchParams({
+    Email: email,
+    Password: password,
+    RememberMe: "true",
+  });
+
   const res = await fetch(`${getBaseUrl()}/api/v1/account/token?api-version=1.0`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      Email: email,
-      Password: password,
-      RememberMe: true,
-    }),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    body: body.toString(),
     cache: "no-store",
   });
 
@@ -84,14 +90,15 @@ async function getToken(): Promise<string> {
     throw new Error(`QuickLoad auth failed (${res.status}): ${text.slice(0, 200)}`);
   }
 
-  const data = (await res.json()) as { token?: string };
-  if (!data.token) {
+  const data = (await res.json()) as { token?: string; data?: { token?: string } };
+  const token = data.token || data.data?.token;
+  if (!token) {
     throw new Error("QuickLoad auth returned no token");
   }
 
   // Cache ~50 minutes (JWT lifetime unknown; refresh conservatively)
-  tokenCache = { token: data.token, expiresAt: Date.now() + 50 * 60_000 };
-  return data.token;
+  tokenCache = { token, expiresAt: Date.now() + 50 * 60_000 };
+  return token;
 }
 
 async function qlFetch<T>(path: string, body: unknown): Promise<T> {

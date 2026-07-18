@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { submitContactLead, submitQuoteRequest } from "@/app/actions/leads";
+import { site } from "@/content/site";
 
 type LeadFormProps = {
   variant?: "contact" | "quote";
@@ -11,34 +13,32 @@ const equipment = ["Dry Van", "Reefer", "Flatbed", "Step Deck", "Hot Shot", "Pow
 
 export function LeadForm({ variant = "contact" }: LeadFormProps) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
+    setErrorMessage(null);
 
     const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
+    const formData = new FormData(form);
 
     try {
-      const subject =
+      const result =
         variant === "quote"
-          ? `Truck quote: ${payload.origin || "N/A"} → ${payload.destination || "N/A"}`
-          : `Website contact from ${payload.name || "prospect"}`;
+          ? await submitQuoteRequest(formData)
+          : await submitContactLead(formData);
 
-      const body = Object.entries(payload)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("\n");
-
-      console.info("[AOL lead]", payload);
-      window.open(
-        `mailto:ops@airoceanlogistics.us?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-        "_self",
-      );
+      if (!result.ok) {
+        setErrorMessage(result.error);
+        setStatus("error");
+        return;
+      }
 
       setStatus("success");
       form.reset();
     } catch {
+      setErrorMessage("Something went wrong. Please call or email us directly.");
       setStatus("error");
     }
   }
@@ -49,8 +49,12 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
         <p className="eyebrow">Request received</p>
         <h3 className="mt-2 text-xl font-semibold text-navy-900">We&apos;re on it</h3>
         <p className="mt-2 text-sm leading-relaxed text-steel-500">
-          Your details were prepared for our team. If your email client opened, hit send. For
-          time-critical loads, call us directly.
+          Thanks — your {variant === "quote" ? "quote request" : "message"} was saved. Our ops team
+          will follow up shortly. For time-critical loads, call{" "}
+          <a href={site.contact.phoneHref} className="font-semibold text-navy-900">
+            {site.contact.phone}
+          </a>
+          .
         </p>
         <button type="button" className="btn-dark mt-6" onClick={() => setStatus("idle")}>
           Submit another
@@ -200,8 +204,10 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
         />
       </div>
 
-      {status === "error" && (
-        <p className="text-sm text-brand-red">Something went wrong. Please call or email us directly.</p>
+      {(status === "error" || errorMessage) && (
+        <p className="text-sm text-brand-red">
+          {errorMessage ?? "Something went wrong. Please call or email us directly."}
+        </p>
       )}
 
       <button type="submit" className="btn-primary w-full sm:w-auto" disabled={status === "submitting"}>

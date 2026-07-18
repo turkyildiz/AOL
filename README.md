@@ -55,9 +55,16 @@ Logos live in `public/brand/`:
    - **CNAME** `www` → `cname.vercel-dns.com`
    - **Do not change MX** (Microsoft 365 mail)
 
-## Forms (current)
+## Forms + Supabase
 
-Contact and quote forms currently prepare a `mailto:` handoff and log payload in the browser console. Next step: wire to Supabase `leads` / `quote_requests` tables.
+Contact and quote forms save to Supabase via server actions (`leads`, `quote_requests`).
+
+1. Run SQL in `supabase/migrations/0001_leads.sql` (see `supabase/README.md`)
+2. Set env vars (`.env.local` + Vercel):
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (recommended, server-only)
+3. View rows in Supabase **Table Editor**
 
 ## Roadmap
 

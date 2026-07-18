@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CtaBand } from "@/components/marketing/CtaBand";
+import { HeroVideoRotator } from "@/components/marketing/HeroVideoRotator";
 import { QuickQuote } from "@/components/marketing/QuickQuote";
 import { site } from "@/content/site";
 
@@ -9,35 +10,13 @@ export default function HomePage() {
     <>
       {/*
         Landing hero like QuickLoad:
-        full-bleed autoplay video + Get a Quote form visible on first screen
+        rotating truck videos + Get a Quote form visible on first screen
       */}
       <section className="relative min-h-[calc(100vh-4.25rem)] overflow-hidden sm:min-h-[calc(100vh-4.75rem)]">
-        {/* Video background */}
-        <div className="absolute inset-0">
-          <video
-            className="hidden h-full w-full object-cover sm:block"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/images/hero-truck.jpg"
-            aria-hidden
-          >
-            <source src="/videos/hero.mp4" type="video/mp4" />
-          </video>
-          {/* Mobile: static image (saves data; matches QL mobile pattern) */}
-          <Image
-            src="/images/hero-truck.jpg"
-            alt=""
-            fill
-            priority
-            className="object-cover sm:hidden"
-            sizes="100vw"
-          />
-          {/* Dark overlay for form readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/55 to-navy-950/80" />
-        </div>
+        {/* 10-clip video rotator (city, rural, flatbed, reefer, dry van, …) */}
+        <HeroVideoRotator />
+        {/* Dark overlay for form readability */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-navy-950/75 via-navy-950/55 to-navy-950/80" />
 
         <div className="container-wide section-pad relative z-10 flex min-h-[calc(100vh-4.25rem)] flex-col justify-center py-10 sm:min-h-[calc(100vh-4.75rem)] sm:py-14">
           <div className="mx-auto w-full max-w-3xl text-center text-white">

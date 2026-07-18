@@ -2,14 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/** Ten looping hero clips — city, rural, flatbed, reefer, dry van, etc. */
+/** Hero clips — city, rural, flatbed, reefer, dry van, etc. */
 export const HERO_VIDEOS = [
   "/videos/hero-01.mp4",
   "/videos/hero-02.mp4",
   "/videos/hero-03.mp4",
   "/videos/hero-04.mp4",
   "/videos/hero-05.mp4",
-  "/videos/hero-06.mp4",
   "/videos/hero-07.mp4",
   "/videos/hero-08.mp4",
   "/videos/hero-09.mp4",
@@ -107,7 +106,6 @@ export function HeroVideoRotator({
               "/images/hero-reefer.jpg",
               "/images/hero-dryvan.jpg",
               "/images/hero-flatbed.jpg",
-              "/images/hero-reefer.jpg",
               "/images/hero-dryvan.jpg",
               "/images/hero-truck.jpg",
               "/images/hero-reefer.jpg",

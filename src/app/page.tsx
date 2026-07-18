@@ -7,60 +7,66 @@ import { site } from "@/content/site";
 export default function HomePage() {
   return (
     <>
-      {/* Hero — QuickLoad-style dark band + messaging */}
-      <section className="hero-ql relative overflow-hidden text-white">
-        <div className="grid-fade pointer-events-none absolute inset-0 opacity-40" />
-        <div className="container-wide section-pad relative py-12 sm:py-16 lg:py-20">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
-            <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-brand-orange">
-                Smart trucking network
-              </p>
-              <h1 className="display text-4xl sm:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
-                Get FTL and partial truck quotes —{" "}
-                <span className="text-brand-orange">built for shippers</span>
-              </h1>
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-steel-300 sm:text-lg">
-                {site.description}
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href="/quote" className="btn-primary">
-                  Get a Quote
-                </Link>
-                <a href={site.contact.phoneHref} className="btn-secondary">
-                  Call {site.contact.phone}
-                </a>
-              </div>
-              <div className="mt-8 flex flex-wrap gap-2">
-                {["Competitive rates", "No hidden fees", "U.S. trucking only", "Live pricing"].map(
-                  (t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-steel-200"
-                    >
-                      {t}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
+      {/*
+        Landing hero like QuickLoad:
+        full-bleed autoplay video + Get a Quote form visible on first screen
+      */}
+      <section className="relative min-h-[calc(100vh-4.25rem)] overflow-hidden sm:min-h-[calc(100vh-4.75rem)]">
+        {/* Video background */}
+        <div className="absolute inset-0">
+          <video
+            className="hidden h-full w-full object-cover sm:block"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/images/hero-truck.jpg"
+            aria-hidden
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
+          {/* Mobile: static image (saves data; matches QL mobile pattern) */}
+          <Image
+            src="/images/hero-truck.jpg"
+            alt=""
+            fill
+            priority
+            className="object-cover sm:hidden"
+            sizes="100vw"
+          />
+          {/* Dark overlay for form readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-navy-950/75 via-navy-950/55 to-navy-950/80" />
+        </div>
 
-            <div className="relative">
-              <div className="absolute -inset-2 rounded-2xl bg-brand-orange/20 blur-2xl" />
-              <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-                <div className="relative aspect-[16/10] w-full">
-                  <Image
-                    src="/images/hero-truck.jpg"
-                    alt="Air & Ocean Logistics truck with Chicago skyline"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+        <div className="container-wide section-pad relative z-10 flex min-h-[calc(100vh-4.25rem)] flex-col justify-center py-10 sm:min-h-[calc(100vh-4.75rem)] sm:py-14">
+          <div className="mx-auto w-full max-w-3xl text-center text-white">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-orange">
+              U.S. trucking brokerage
+            </p>
+            <h1 className="display mx-auto mt-3 max-w-2xl text-3xl sm:text-4xl lg:text-5xl">
+              Get a freight quote in seconds
+            </h1>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-steel-200 sm:text-base">
+              Full truckload &amp; partial · Live network rates · No hidden fees
+            </p>
           </div>
+
+          {/* Quote form on the video — same first-screen pattern as QuickLoad */}
+          <div className="mx-auto mt-8 w-full max-w-3xl">
+            <QuickQuote layout="hero" />
+          </div>
+
+          <p className="mt-6 text-center text-xs text-steel-300">
+            Prefer to talk?{" "}
+            <a href={site.contact.phoneHref} className="font-semibold text-white underline-offset-2 hover:underline">
+              {site.contact.phone}
+            </a>{" "}
+            ·{" "}
+            <a href={site.contact.emailHref} className="font-semibold text-white underline-offset-2 hover:underline">
+              {site.contact.email}
+            </a>
+          </p>
         </div>
       </section>
 
@@ -78,22 +84,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Instant quote — homepage centerpiece like QuickLoad */}
-      <section className="mesh-light section-pad border-b border-steel-200 py-12 sm:py-16">
-        <div className="container-wide">
-          <div className="mb-8 max-w-2xl">
-            <h2 className="display text-3xl text-navy-900 sm:text-4xl">
-              Quick <span className="text-brand-orange">Quote</span>
-            </h2>
-            <p className="mt-3 text-base text-steel-500">
-              Provide load details and get FTL and partial rates in seconds — everywhere in the U.S.
-            </p>
-          </div>
-          <QuickQuote />
-        </div>
-      </section>
-
-      {/* Services cards */}
+      {/* Services */}
       <section className="section-pad py-16 sm:py-20">
         <div className="container-wide">
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -118,7 +109,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why us */}
+      {/* Why us + photo */}
       <section className="border-y border-steel-200 bg-steel-50 section-pad py-16">
         <div className="container-wide grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="relative min-h-[280px] overflow-hidden rounded-2xl">

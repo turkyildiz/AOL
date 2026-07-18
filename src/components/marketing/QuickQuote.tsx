@@ -59,27 +59,24 @@ export function QuickQuote() {
       {/* Form — QuickLoad-style Quick Quote */}
       <div className="lg:col-span-7">
         <div className="card-glow overflow-hidden p-0">
-          <div className="border-b border-navy-900/8 bg-ink px-6 py-5 text-white sm:px-8">
+          <div className="border-b border-steel-200 bg-white px-6 py-5 sm:px-8">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-red-bright">
-                  Instant pricing
-                </p>
-                <h2 className="mt-1 text-2xl font-semibold tracking-tight">
-                  Quick <span className="text-brand-red-bright">Quote</span>
+                <h2 className="text-2xl font-semibold tracking-tight text-navy-900">
+                  Quick <span className="text-brand-orange">Quote</span>
                 </h2>
-                <p className="mt-1 text-sm text-steel-300">
-                  Powered by QuickLoad — live U.S. truck rates in seconds.
+                <p className="mt-1 text-sm text-steel-500">
+                  Live U.S. truck rates in seconds · FTL &amp; partial
                 </p>
               </div>
             </div>
 
             {/* Mode tabs like QuickLoad */}
-            <div className="mt-5 flex rounded-xl border border-white/10 bg-white/5 p-1">
+            <div className="mt-5 flex overflow-hidden rounded-md border border-steel-200">
               {(
                 [
-                  { id: "FTL" as const, label: "Full Truck", sub: "FTL" },
-                  { id: "Partial" as const, label: "Partial", sub: "LTL" },
+                  { id: "FTL" as const, label: "Full Truck" },
+                  { id: "Partial" as const, label: "Partial" },
                 ] as const
               ).map((tab) => (
                 <button
@@ -91,14 +88,13 @@ export function QuickQuote() {
                     setResult(null);
                     setError(null);
                   }}
-                  className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
+                  className={`flex-1 px-3 py-3 text-sm font-semibold transition ${
                     mode === tab.id
-                      ? "bg-brand-red text-white shadow-lg shadow-brand-red/30"
-                      : "text-steel-300 hover:bg-white/5 hover:text-white"
+                      ? "bg-brand-orange text-white"
+                      : "bg-steel-50 text-navy-900 hover:bg-steel-100"
                   }`}
                 >
                   {tab.label}
-                  <span className="ml-1.5 text-[10px] font-medium opacity-80">{tab.sub}</span>
                 </button>
               ))}
             </div>
@@ -319,10 +315,10 @@ export function QuickQuote() {
 
             <button
               type="submit"
-              className="btn-primary w-full !py-3.5 text-base"
+              className="btn-green w-full !py-3.5 text-base"
               disabled={status === "loading"}
             >
-              {status === "loading" ? "Getting QuickLoad price…" : "Get a Quote"}
+              {status === "loading" ? "Getting price…" : "Get a Quote"}
             </button>
 
             <p className="text-center text-xs text-steel-500">

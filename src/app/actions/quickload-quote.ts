@@ -99,42 +99,26 @@ export async function getInstantQuickloadQuote(
     let qlQuote: QuickloadQlQuote | null = null;
 
     if (mode === "FTL") {
-      const freightInfo =
-        weight > 0
-          ? {
-              qty: 1,
-              weight,
-              weightType: "lbs",
-              length: length || undefined,
-              width: width || undefined,
-              height: height || undefined,
-              commodity,
-              dimType: "in",
-            }
-          : null;
+      // Marketplace FTL is the reliable path; QL network quote is optional
+      const marketplace = await getFtlQuotes({
+        origin,
+        destination,
+        pickupDate,
+        equipment: mapEquipment(equipment),
+      });
+      rates = marketplace ?? [];
 
-      const [ql, marketplace] = await Promise.allSettled([
-        getQlQuote({
+      try {
+        qlQuote = await getQlQuote({
           origin,
           destination,
           pickupDate,
           isFTL: true,
           truckType: mapEquipment(equipment),
-          freightInfo,
-        }),
-        getFtlQuotes({
-          origin,
-          destination,
-          pickupDate,
-          equipment: mapEquipment(equipment),
-          freightInfo,
-        }),
-      ]);
-
-      if (ql.status === "fulfilled") qlQuote = ql.value;
-      if (marketplace.status === "fulfilled") rates = marketplace.value ?? [];
-      if (ql.status === "rejected" && marketplace.status === "rejected") {
-        throw marketplace.reason ?? ql.reason;
+          freightInfo: null,
+        });
+      } catch {
+        qlQuote = null;
       }
     } else {
       if (weight <= 0) {

@@ -1,6 +1,5 @@
 /**
  * QuickLoad Shipper API client (server-only).
- * Docs: https://www.quickload.com/developer
  * Prod API: https://shipperapi.azurewebsites.net
  */
 
@@ -68,7 +67,6 @@ async function getToken(): Promise<string> {
     throw new Error("QuickLoad credentials are not configured");
   }
 
-  // Token endpoint expects form-urlencoded (JSON returns 415)
   const body = new URLSearchParams({
     Email: email,
     Password: password,
@@ -96,45 +94,31 @@ async function getToken(): Promise<string> {
     throw new Error("QuickLoad auth returned no token");
   }
 
-  // Cache ~50 minutes (JWT lifetime unknown; refresh conservatively)
   tokenCache = { token, expiresAt: Date.now() + 50 * 60_000 };
   return token;
 }
 
 async function qlFetch<T>(path: string, body: unknown): Promise<T> {
   const token = await getToken();
-  const res = await fetch(`${getBaseUrl()}${path}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
+  const doFetch = async (tok: string) =>
+    fetch(`${getBaseUrl()}${path}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${tok}`,
+      },
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+
+  let res = await doFetch(token);
+  if (res.status === 401) {
+    tokenCache = null;
+    res = await doFetch(await getToken());
+  }
 
   if (!res.ok) {
-    // Retry once on 401 with fresh token
-    if (res.status === 401) {
-      tokenCache = null;
-      const token2 = await getToken();
-      const res2 = await fetch(`${getBaseUrl()}${path}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${token2}`,
-        },
-        body: JSON.stringify(body),
-        cache: "no-store",
-      });
-      if (!res2.ok) {
-        const text = await res2.text().catch(() => "");
-        throw new Error(`QuickLoad API ${path} failed (${res2.status}): ${text.slice(0, 300)}`);
-      }
-      return (await res2.json()) as T;
-    }
     const text = await res.text().catch(() => "");
     throw new Error(`QuickLoad API ${path} failed (${res.status}): ${text.slice(0, 300)}`);
   }
@@ -142,7 +126,7 @@ async function qlFetch<T>(path: string, body: unknown): Promise<T> {
   return (await res.json()) as T;
 }
 
-function basePrimus(origin: QuoteLocation, destination: QuoteLocation, pickupDate: string) {
+function loc(origin: QuoteLocation, destination: QuoteLocation, pickupDate: string) {
   return {
     originCity: origin.city,
     originState: origin.state,
@@ -157,7 +141,78 @@ function basePrimus(origin: QuoteLocation, destination: QuoteLocation, pickupDat
   };
 }
 
-/** Instant QuickLoad network quote (single price) */
+function normalizeRates(data: unknown): QuickloadRate[] {
+  const arr = Array.isArray(data)
+    ? data
+    : data && typeof data === "object" && Array.isArray((data as { data?: unknown }).data)
+      ? (data as { data: QuickloadRate[] }).data
+      : [];
+  return (arr as QuickloadRate[])
+    .filter((r) => typeof r.totalAmount === "number" && (r.totalAmount as number) > 0)
+    .sort((a, b) => (a.totalAmount ?? 0) - (b.totalAmount ?? 0));
+}
+
+/** Simple FTL quote — matches payload that returns live marketplace rates */
+export async function getFtlQuotes(input: {
+  origin: QuoteLocation;
+  destination: QuoteLocation;
+  pickupDate: string;
+  equipment?: string;
+}): Promise<QuickloadRate[]> {
+  const equipment = input.equipment || "Van";
+  // Try primary simple payload first (proven to return rates)
+  const data = await qlFetch<unknown>("/api/v1/quote/getftlquote?api-version=1.0", {
+    quotePrimusRequest: {
+      ...loc(input.origin, input.destination, input.pickupDate),
+      equipment,
+      accessorials: [],
+      freightInfo: null,
+      isFTL: true,
+    },
+    accessorialTypeIds: [],
+    shipmentTypeId: 1,
+    truckTypeId: 1,
+  });
+  let rates = normalizeRates(data);
+  if (rates.length === 0 && equipment !== "Van") {
+    const retry = await qlFetch<unknown>("/api/v1/quote/getftlquote?api-version=1.0", {
+      quotePrimusRequest: {
+        ...loc(input.origin, input.destination, input.pickupDate),
+        equipment: "Van",
+        accessorials: [],
+        freightInfo: null,
+        isFTL: true,
+      },
+      accessorialTypeIds: [],
+      shipmentTypeId: 1,
+      truckTypeId: 1,
+    });
+    rates = normalizeRates(retry);
+  }
+  return rates;
+}
+
+export async function getLtlQuotes(input: {
+  origin: QuoteLocation;
+  destination: QuoteLocation;
+  pickupDate: string;
+  freightInfo: FreightLine[];
+}): Promise<QuickloadRate[]> {
+  const data = await qlFetch<unknown>("/api/v1/quote/getltlquote?api-version=1.0", {
+    quotePrimusRequest: {
+      ...loc(input.origin, input.destination, input.pickupDate),
+      equipment: null,
+      accessorials: [],
+      freightInfo: input.freightInfo,
+      isFTL: false,
+    },
+    accessorialTypeIds: [],
+    shipmentTypeId: 2,
+    truckTypeId: 0,
+  });
+  return normalizeRates(data);
+}
+
 export async function getQlQuote(input: {
   origin: QuoteLocation;
   destination: QuoteLocation;
@@ -167,63 +222,9 @@ export async function getQlQuote(input: {
   freightInfo?: FreightLine | FreightLine[] | null;
 }): Promise<QuickloadQlQuote> {
   return qlFetch<QuickloadQlQuote>("/api/v1/quote/getqlquote?api-version=1.0", {
-    ...basePrimus(input.origin, input.destination, input.pickupDate),
+    ...loc(input.origin, input.destination, input.pickupDate),
     isFTL: input.isFTL,
-    truckType: input.truckType ?? null,
+    truckType: input.truckType ?? "Van",
     freightInfo: input.freightInfo ?? null,
   });
-}
-
-/** Marketplace FTL rates */
-export async function getFtlQuotes(input: {
-  origin: QuoteLocation;
-  destination: QuoteLocation;
-  pickupDate: string;
-  equipment?: string;
-  truckTypeId?: number;
-  shipmentTypeId?: number;
-  freightInfo?: FreightLine | null;
-}): Promise<QuickloadRate[]> {
-  const data = await qlFetch<QuickloadRate[] | { data?: QuickloadRate[] }>(
-    "/api/v1/quote/getftlquote?api-version=1.0",
-    {
-      quotePrimusRequest: {
-        ...basePrimus(input.origin, input.destination, input.pickupDate),
-        equipment: input.equipment ?? "Van",
-        accessorials: [],
-        freightInfo: input.freightInfo ?? null,
-        isFTL: true,
-      },
-      accessorialTypeIds: [],
-      shipmentTypeId: input.shipmentTypeId ?? 1,
-      truckTypeId: input.truckTypeId ?? 1,
-    },
-  );
-  return Array.isArray(data) ? data : data.data ?? [];
-}
-
-/** Marketplace LTL rates */
-export async function getLtlQuotes(input: {
-  origin: QuoteLocation;
-  destination: QuoteLocation;
-  pickupDate: string;
-  freightInfo: FreightLine[];
-  shipmentTypeId?: number;
-}): Promise<QuickloadRate[]> {
-  const data = await qlFetch<QuickloadRate[] | { data?: QuickloadRate[] }>(
-    "/api/v1/quote/getltlquote?api-version=1.0",
-    {
-      quotePrimusRequest: {
-        ...basePrimus(input.origin, input.destination, input.pickupDate),
-        equipment: null,
-        accessorials: [],
-        freightInfo: input.freightInfo,
-        isFTL: false,
-      },
-      accessorialTypeIds: [],
-      shipmentTypeId: input.shipmentTypeId ?? 2,
-      truckTypeId: 0,
-    },
-  );
-  return Array.isArray(data) ? data : data.data ?? [];
 }

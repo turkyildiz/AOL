@@ -32,7 +32,7 @@ export function LeadForm({ variant = "contact" }: LeadFormProps) {
 
       console.info("[AOL lead]", payload);
       window.open(
-        `mailto:quotes@airoceanlogistics.us?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+        `mailto:ops@airoceanlogistics.us?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
         "_self",
       );
 

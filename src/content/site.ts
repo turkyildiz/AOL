@@ -11,8 +11,8 @@ export const site = {
   contact: {
     phone: "(312) 342-7133",
     phoneHref: "tel:+13123427133",
-    email: "quotes@airoceanlogistics.us",
-    emailHref: "mailto:quotes@airoceanlogistics.us",
+    email: "ops@airoceanlogistics.us",
+    emailHref: "mailto:ops@airoceanlogistics.us",
     addressLines: ["Schaumburg, IL", "United States"],
   },
   nav: [

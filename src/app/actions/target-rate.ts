@@ -1,5 +1,6 @@
 "use server";
 
+import { formatTargetRateEmail, notifyDispatch } from "@/lib/email/dispatch";
 import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/admin";
 import { targetRateOfferSchema } from "@/lib/validations/leads";
 
@@ -122,6 +123,37 @@ export async function submitTargetRate(formData: FormData): Promise<TargetRateRe
         ok: false,
         error: "Could not save your target. Please try again or call ops.",
       };
+    }
+
+    // Await so serverless doesn't freeze before the mail leaves (still don't fail the shipper)
+    try {
+      const mail = await notifyDispatch(
+        formatTargetRateEmail({
+          status,
+          aggressive,
+          gapPct,
+          marketBest: market,
+          targetRate: target,
+          origin: data.origin,
+          destination: data.destination,
+          mode: data.mode,
+          equipment: data.equipment,
+          readyDate: data.readyDate,
+          weight: data.weight,
+          cargo: data.cargo,
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          company: data.company,
+          flexiblePickup: data.flexiblePickup,
+          canWait: data.canWait,
+          notes: data.notes,
+        }),
+      );
+      if (!mail.ok) console.error("[submitTargetRate] dispatch email failed:", mail.error);
+      else console.info("[submitTargetRate] dispatch email via", mail.via);
+    } catch (mailErr) {
+      console.error("[submitTargetRate] dispatch email error", mailErr);
     }
 
     return {

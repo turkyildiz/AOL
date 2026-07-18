@@ -1,5 +1,6 @@
 "use server";
 
+import { formatLeadEmail, notifyDispatch } from "@/lib/email/dispatch";
 import { createAdminClient, isSupabaseConfigured } from "@/lib/supabase/admin";
 import { contactLeadSchema, quoteRequestSchema } from "@/lib/validations/leads";
 
@@ -46,6 +47,22 @@ export async function submitContactLead(formData: FormData): Promise<LeadActionR
     if (error) {
       console.error("[submitContactLead]", error.message);
       return { ok: false, error: "Could not save your message. Please try again or call us." };
+    }
+
+    try {
+      const mail = await notifyDispatch(
+        formatLeadEmail({
+          kind: "contact",
+          name: parsed.data.name,
+          email: parsed.data.email,
+          phone: parsed.data.phone,
+          company: parsed.data.company,
+          message: parsed.data.message,
+        }),
+      );
+      if (!mail.ok) console.error("[submitContactLead] dispatch email failed:", mail.error);
+    } catch (mailErr) {
+      console.error("[submitContactLead] dispatch email error", mailErr);
     }
 
     return { ok: true };
@@ -108,6 +125,29 @@ export async function submitQuoteRequest(formData: FormData): Promise<LeadAction
     if (error) {
       console.error("[submitQuoteRequest]", error.message);
       return { ok: false, error: "Could not save your quote. Please try again or call us." };
+    }
+
+    try {
+      const mail = await notifyDispatch(
+        formatLeadEmail({
+          kind: "quote",
+          name: parsed.data.name,
+          email: parsed.data.email,
+          phone: parsed.data.phone,
+          company: parsed.data.company,
+          message: parsed.data.message,
+          origin: parsed.data.origin,
+          destination: parsed.data.destination,
+          mode: parsed.data.mode,
+          equipment: parsed.data.equipment,
+          readyDate: parsed.data.readyDate,
+          weight: parsed.data.weight,
+          cargo: parsed.data.cargo,
+        }),
+      );
+      if (!mail.ok) console.error("[submitQuoteRequest] dispatch email failed:", mail.error);
+    } catch (mailErr) {
+      console.error("[submitQuoteRequest] dispatch email error", mailErr);
     }
 
     return { ok: true };
